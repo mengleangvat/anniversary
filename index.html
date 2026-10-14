@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Anniversary — Digital Love Letter</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Playfair Display & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serifEn: ['"Playfair Display"', 'serif'],
+                        sans: ['"Poppins"', 'sans-serif'],
+                        sansEn: ['"Poppins"', 'sans-serif'],
+                    },
+                    colors: {
+                        rose: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            300: '#fda4af',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                            800: '#9f1239',
+                            900: '#881337',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ==========================================
+           GLOBAL & ROMANTIC THEME STYLES
+           ========================================== */
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at 50% 20%, #fff5f7 0%, #ffe4e8 45%, #fecdd6 100%);
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+            color: #4a1d28;
+            position: relative;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 20px 50px rgba(225, 29, 72, 0.12), 0 4px 16px rgba(225, 29, 72, 0.06);
+        }
+
+        .stage-screen {
+            transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .stage-hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px) scale(0.97);
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+        }
+
+        .stage-active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+            position: relative;
+            z-index: 10;
+        }
+
+        @keyframes shakeError {
+            0%, 100% { transform: translateX(0); }
+            15%, 45%, 75% { transform: translateX(-10px); }
+            30%, 60%, 90% { transform: translateX(10px); }
+        }
+        .animate-shake {
+            animation: shakeError 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+
+        .keypad-btn {
+            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(254, 205, 211, 0.7);
+            box-shadow: 0 4px 10px rgba(244, 63, 94, 0.06);
+        }
+        .keypad-btn:hover {
+            background: rgba(255, 241, 242, 0.95);
+            border-color: #fda4af;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(244, 63, 94, 0.12);
+        }
+        .keypad-btn:active, .keypad-btn.pressed {
+            transform: scale(0.92);
+            background: #ffe4e6;
+        }
+
+        /* ==========================================
+           3D REALISTIC ENVELOPE STYLES
+           ========================================== */
+        .envelope-scene {
+            perspective: 1200px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 310px;
+            height: 210px;
+            margin: 0 auto;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @media (min-width: 640px) {
+            .envelope-wrapper {
+                width: 360px;
+                height: 240px;
+            }
+        }
+
+        .envelope-scene:hover .envelope-wrapper:not(.is-open) {
+            transform: translateY(-8px) rotateX(4deg);
+        }
+
+        .envelope-back {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%);
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(190, 18, 60, 0.38), 0 0 0 1px rgba(255,255,255,0.2) inset;
+            z-index: 1;
+        }
+
+        .envelope-letter-preview {
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            bottom: 10px;
+            height: 185px;
+            background: #fffdf9;
+            border-radius: 8px;
+            padding: 18px 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            z-index: 2;
+            transition: transform 0.85s cubic-bezier(0.34, 1.4, 0.64, 1) 0.45s, opacity 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: center;
+            border: 1px solid #fce7f3;
+            background-image: radial-gradient(#fecdd3 0.75px, transparent 0.75px);
+            background-size: 16px 16px;
+        }
+
+        @media (min-width: 640px) {
+            .envelope-letter-preview {
+                height: 210px;
+            }
+        }
+
+        .envelope-wrapper.is-open .envelope-letter-preview {
+            transform: translateY(-115px) scale(1.03);
+        }
+
+        .envelope-pocket {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            overflow: hidden;
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        .pocket-left {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #fda4af 0%, #fb7185 100%);
+            clip-path: polygon(0 0, 52% 52%, 0 100%);
+        }
+
+        .pocket-right {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(225deg, #fda4af 0%, #fb7185 100%);
+            clip-path: polygon(100% 0, 48% 52%, 100% 100%);
+        }
+
+        .pocket-bottom {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, #f43f5e 0%, #fb7185 95%);
+            clip-path: polygon(0 100%, 50% 44%, 100% 100%);
+            filter: drop-shadow(0 -3px 6px rgba(136, 19, 55, 0.15));
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(180deg, #ffe4e6 0%, #fda4af 100%);
+            clip-path: polygon(0 0, 50% 58%, 100% 0);
+            transform-origin: top center;
+            transform: rotateX(0deg);
+            transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s 0.25s;
+            z-index: 4;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            filter: drop-shadow(0 6px 10px rgba(159, 18, 57, 0.22));
+        }
+
+        .envelope-wrapper.is-open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .wax-seal {
+            position: absolute;
+            top: 54%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 58px;
+            height: 58px;
+            border-radius: 9999px;
+            background: radial-gradient(circle at 30% 30%, #f43f5e, #be123c 70%, #881337 100%);
+            box-shadow: 
+                0 6px 18px rgba(190, 18, 60, 0.5),
+                0 0 22px rgba(244, 63, 94, 0.65),
+                inset 0 2px 4px rgba(255, 255, 255, 0.4),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.35);
+            border: 2px dashed rgba(254, 205, 211, 0.55);
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: sealPulse 2.2s infinite ease-in-out;
+        }
+
+        @keyframes sealPulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 0 6px 18px rgba(190, 18, 60, 0.5), 0 0 18px rgba(244, 63, 94, 0.55);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.08);
+                box-shadow: 0 8px 24px rgba(190, 18, 60, 0.65), 0 0 30px rgba(244, 63, 94, 0.9);
+            }
+        }
+
+        .envelope-wrapper.is-open .wax-seal {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(1.5);
+            pointer-events: none;
+        }
+
+        .stationery-paper {
+            background-color: #fffdfa;
+            background-image: 
+                linear-gradient(rgba(254, 205, 211, 0.28) 1px, transparent 1px);
+            background-size: 100% 34px;
+            box-shadow: 
+                0 25px 60px -15px rgba(159, 18, 57, 0.18),
+                0 0 0 1px rgba(254, 205, 211, 0.6),
+                inset 0 0 40px rgba(255, 228, 230, 0.35);
+        }
+
+        .polaroid-card {
+            background: #ffffff;
+            padding: 12px 12px 26px 12px;
+            box-shadow: 
+                0 14px 30px rgba(136, 19, 55, 0.12),
+                0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f3e8ee;
+            transform: rotate(-1.5deg);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+        }
+
+        .polaroid-card:hover {
+            transform: rotate(0deg) scale(1.02);
+            box-shadow: 0 20px 40px rgba(190, 18, 60, 0.18);
+        }
+
+        .washi-tape {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            width: 110px;
+            height: 28px;
+            background: rgba(253, 164, 175, 0.55);
+            backdrop-filter: blur(2px);
+            border-left: 2px dotted rgba(255,255,255,0.8);
+            border-right: 2px dotted rgba(255,255,255,0.8);
+            box-shadow: 0 2px 6px rgba(225, 29, 72, 0.1);
+            z-index: 10;
+        }
+
+        /* Layered Photo Stack Styles */
+        .stack-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 310px;
+            height: 380px;
+            margin: 0 auto;
+            user-select: none;
+            touch-action: pan-y;
+        }
+
+        .stack-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 330px;
+            border-radius: 20px;
+            background: #ffffff;
+            border: 1px solid rgba(254, 205, 211, 0.9);
+            box-shadow: 0 16px 36px -8px rgba(190, 18, 60, 0.15), 0 4px 12px rgba(0, 0, 0, 0.04);
+            padding: 10px 10px 18px 10px;
+            cursor: pointer;
+            transform-origin: center bottom;
+            transition: transform 0.5s cubic-bezier(0.34, 1.35, 0.64, 1), opacity 0.4s ease;
+        }
+
+        .stack-card.slide-exit {
+            transform: translateX(130%) translateY(-25px) rotate(22deg) scale(0.92) !important;
+            opacity: 0 !important;
+            pointer-events: none;
+            transition: transform 0.36s cubic-bezier(0.2, 0.8, 0.4, 1), opacity 0.28s ease !important;
+        }
+
+        /* =======================================================
+           CODED 3D GIFT CARDS & LID ANIMATION
+           ======================================================= */
+        @keyframes giftWobble {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-5deg) scale(1.06); }
+            75% { transform: rotate(5deg) scale(1.06); }
+        }
+
+        .gift-card {
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .gift-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 30px -6px rgba(244, 63, 94, 0.22);
+        }
+
+        .gift-card:hover .gift-svg-wrapper {
+            animation: giftWobble 0.65s ease-in-out infinite;
+        }
+
+        .gift-lid-group {
+            transform-origin: center 35px;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .gift-card.is-opened {
+            background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+            border-color: #fb7185;
+        }
+
+        .gift-card.is-opened .gift-lid-group {
+            transform: translateY(-14px) rotate(-15deg);
+        }
+
+        /* Full-Screen Gift Modal Animation */
+        .gift-modal-backdrop {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gift-modal-backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .gift-modal-card {
+            transform: scale(0.7) translateY(30px);
+            opacity: 0;
+            transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+        }
+
+        .gift-modal-backdrop.active .gift-modal-card {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-8px) scale(1.03); }
+        }
+
+        .animate-float-slow {
+            animation: floatSlow 2.6s ease-in-out infinite;
+        }
+
+        /* Full-screen Coded Flower & Heart Explosion Animation */
+        @keyframes fullScreenGraphicPop {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0) rotate(0deg);
+            }
+            18% {
+                opacity: 1;
+                transform: translate(calc(-50% + var(--tx) * 0.45), calc(-50% + var(--ty) * 0.45)) scale(var(--scale)) rotate(calc(var(--rot) * 0.5));
+            }
+            75% {
+                opacity: 1;
+                transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(var(--scale)) rotate(var(--rot));
+            }
+            100% {
+                opacity: 0;
+                transform: translate(calc(-50% + var(--tx) * 1.15), calc(-50% + var(--ty) + 100px)) scale(0.3) rotate(calc(var(--rot) * 1.3));
+            }
+        }
+
+        .fullscreen-burst-item {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            will-change: transform, opacity;
+            animation: fullScreenGraphicPop var(--dur) cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            filter: drop-shadow(0 8px 14px rgba(225, 29, 72, 0.22));
+        }
+
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .music-playing-spin {
+            animation: spinSlow 6s linear infinite;
+        }
+
+        @keyframes burstUp {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(0.4) rotate(0deg);
+            }
+            70% {
+                opacity: 0.9;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1.25) rotate(var(--rot));
+            }
+        }
+        .burst-item {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            pointer-events: none;
+            z-index: 20;
+            animation: burstUp 1.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff1f2;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #fda4af;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="selection:bg-rose-200 selection:text-rose-900">
+
+    <audio id="custom-bgm" loop preload="auto"></audio>
+    <canvas id="hearts-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Full-Screen Coded Flower & Heart Explosion Container -->
+    <div id="fullscreen-burst-container" class="fixed inset-0 pointer-events-none z-[110] overflow-hidden"></div>
+
+    <!-- =====================================================
+         FULL-SCREEN GIFT POPUP MODAL (Closes when tapped anywhere)
+         ===================================================== -->
+    <div id="gift-fullscreen-modal" 
+         onclick="closeGiftModal()"
+         class="gift-modal-backdrop fixed inset-0 z-[105] bg-rose-950/65 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer select-none">
+        
+        <div class="gift-modal-card glass-card bg-white/95 rounded-3xl p-7 sm:p-10 max-w-md w-full text-center relative overflow-hidden border-2 border-rose-300 shadow-2xl">
+            <div class="-top-16 -left-16 w-40 h-40 bg-rose-300/30 rounded-full blur-2xl pointer-events-none absolute"></div>
+            <div class="-bottom-16 -right-16 w-40 h-40 bg-pink-300/30 rounded-full blur-2xl pointer-events-none absolute"></div>
+
+            <!-- 100% Code-Generated Flower Bouquet, Rose & Heart Illustrations -->
+            <div class="relative flex items-center justify-center gap-2 mb-5 animate-float-slow">
+                <img class="icon-rose w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-md -rotate-12" alt="Rose">
+                <img class="icon-bouquet w-28 h-28 sm:w-32 sm:h-32 object-contain drop-shadow-xl z-10" alt="Bouquet">
+                <img class="icon-tulip w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-md rotate-12" alt="Tulip">
+            </div>
+
+            <span class="inline-block px-4 py-1 rounded-full bg-rose-100 text-rose-700 text-xs font-semibold tracking-widest uppercase mb-3">
+                Your Special Gift
+            </span>
+
+            <h3 class="text-2xl sm:text-3xl font-bold text-rose-900 font-serifEn leading-snug mb-4">
+                Now just give me a kiss pls
+            </h3>
+
+            <!-- Coded Decorative Hearts & Flowers -->
+            <div class="flex justify-center items-center gap-3 my-4">
+                <img class="icon-sparkle-heart w-8 h-8 object-contain animate-bounce" alt="Sparkling Heart">
+                <img class="icon-flower w-9 h-9 object-contain animate-pulse" alt="Flower">
+                <img class="icon-sparkle-heart w-8 h-8 object-contain animate-bounce" alt="Sparkling Heart">
+            </div>
+
+            <p class="mt-6 text-xs font-medium text-rose-500/90 animate-pulse tracking-wide uppercase">
+                Tap anywhere on screen to close
+            </p>
+        </div>
+    </div>
+
+    <!-- Floating Top Bar (Music Control) -->
+    <div class="fixed top-4 right-4 z-50 flex items-center gap-2">
+        <button id="music-toggle-btn" 
+                onclick="toggleMusic()"
+                title="Play/Pause Music"
+                class="glass-card flex items-center gap-2 px-3.5 py-2 rounded-full text-rose-700 hover:bg-white/90 active:scale-95 transition-all shadow-md">
+            <span id="music-icon-wrapper" class="w-5 h-5 flex items-center justify-center text-rose-500">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                </svg>
+            </span>
+            <span id="music-status-text" class="text-xs font-medium tracking-wide">Music: Off</span>
+        </button>
+    </div>
+
+    <!-- Main Container -->
+    <main class="relative z-10 min-h-screen min-h-[100dvh] flex flex-col items-center justify-center px-4 py-12 sm:py-16">
+
+        <!-- =====================================================
+             STAGE 1: 6-DIGIT PASSCODE LOCK SCREEN
+             ===================================================== -->
+        <section id="stage-passcode" class="stage-screen stage-active w-full max-w-sm mx-auto">
+            <div id="passcode-card" class="glass-card rounded-3xl p-6 sm:p-8 text-center relative overflow-hidden">
+                <div class="-top-12 -right-12 w-32 h-32 bg-rose-300/30 rounded-full blur-2xl pointer-events-none absolute"></div>
+                <div class="-bottom-12 -left-12 w-32 h-32 bg-pink-300/30 rounded-full blur-2xl pointer-events-none absolute"></div>
+
+                <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 p-0.5 shadow-lg shadow-rose-300/50 flex items-center justify-center">
+                    <div class="w-full h-full bg-white/95 rounded-[14px] flex items-center justify-center text-rose-500">
+                        <svg class="w-8 h-8 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM8.9 6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9V6z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <p class="font-serifEn italic text-rose-500 text-sm tracking-widest uppercase mb-1">Our Secret Space</p>
+                <h1 class="text-lg sm:text-xl font-bold text-rose-950 mb-1 leading-relaxed">
+                    Enter Our 6-Digit Passcode
+                </h1>
+                <p id="passcode-feedback" class="text-xs text-rose-600/80 min-h-[20px] transition-colors flex items-center justify-center gap-1.5">
+                    <span>Enter the code to unlock your Anniversary letter</span>
+                    <img class="icon-heart w-4 h-4 object-contain inline" alt="Heart">
+                </p>
+
+                <!-- 6-Dot PIN Indicator -->
+                <div class="flex items-center justify-center gap-3 sm:gap-3.5 my-6" id="pin-dots-container">
+                    <div class="pin-dot w-4 h-4 rounded-full border-2 border-rose-400 bg-transparent transition-all duration-200 flex items-center justify-center"></div>
+                    <div class="pin-dot w-4 h-4 rounded-full border-2 border-rose-400 bg-transparent transition-all duration-200 flex items-center justify-center"></div>
+                    <div class="pin-dot w-4 h-4 rounded-full border-2 border-rose-400 bg-transparent transition-all duration-200 flex items-center justify-center"></div>
+                    <div class="pin-dot w-4 h-4 rounded-full border-2 border-rose-400 bg-transparent transition-all duration-200 flex items-center justify-center"></div>
+                    <div class="pin-dot w-4 h-4 rounded-full border-2 border-rose-400 bg-transparent transition-all duration-200 flex items-center justify-center"></div>
+                    <div class="pin-dot w-4 h-4 rounded-full border-2 border-rose-400 bg-transparent transition-all duration-200 flex items-center justify-center"></div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3 max-w-[260px] mx-auto my-2">
+                    <button type="button" onclick="pressDigit('1')" data-key="1" class="keypad-btn h-13 py-3 rounded-2xl text-lg font-semibold text-rose-900">1</button>
+                    <button type="button" onclick="pressDigit('2')" data-key="2" class="keypad-btn h-13 py-3 rounded-2xl text-lg font-semibold text-rose-900">2</button>
+                    <button type="button" onclick="pressDigit('3')" data-key="3" class="keypad-btn h-13 py-3 rounded-2xl text-lg font-semibold text-rose-900">3</button>
+                    <button type="button" onclick="pressDigit('4')" data-key="4" class="keypad-btn h-13 py-3 rounded-2xl text-lg font-semibold text-rose-900">4</button>
+                    <button type="button" onclick="pressDigit('5')" data-key="5" class="keypad-btn h-13 py-3 rounded-2xl text-lg font-semibold text-rose-900">5</button>
+                    <button type="button" onclick="pressDigit('6')" data-key="6" class="keypad-btn h-13 py-3 rounded-2xl text-lg font-semibold text-rose-900">6</button>
+                    <button type="button" onclick="pressDigit('7')" data-key="7" class="keypad-btn h-13 py-3 rounded-2xl text-lg font-semibold text-rose-900">7</button>
+                    <button type="button" onclick="pressDigit('8')" data-key="8" class="keypad-btn h-13 py-3 rounded-2xl text-lg font-semibold text-rose-900">8</button>
+                    <button type="button" onclick="pressDigit('9')" data-key="9" class="keypad-btn h-13 py-3 rounded-2xl text-lg font-semibold text-rose-900">9</button>
+                    
+                    <button type="button" onclick="clearPin()" class="keypad-btn h-13 py-3 rounded-2xl text-xs font-semibold text-rose-600 flex items-center justify-center uppercase tracking-wider">
+                        Clear
+                    </button>
+                    <button type="button" onclick="pressDigit('0')" data-key="0" class="keypad-btn h-13 py-3 rounded-2xl text-lg font-semibold text-rose-900">0</button>
+                    <button type="button" onclick="backspacePin()" class="keypad-btn h-13 py-3 rounded-2xl text-rose-700 flex items-center justify-center" aria-label="Backspace">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="mt-6 pt-3 border-t border-rose-200/60">
+                    <button type="button" onclick="toggleHint()" class="text-xs text-rose-500 hover:text-rose-700 underline decoration-rose-300 underline-offset-4 transition-colors">
+                        Forgot the passcode? Tap for a hint
+                    </button>
+                    <div id="pin-hint-box" class="hidden mt-2.5 px-3 py-2 rounded-xl bg-rose-100/80 text-rose-800 text-xs font-medium transition-all">
+                        Hint: Our special date (<span class="font-bold underline cursor-pointer" onclick="autoFillPin()">091125</span>)
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             STAGE 2: THE 3D ENVELOPE SCREEN
+             ===================================================== -->
+        <section id="stage-envelope" class="stage-screen stage-hidden w-full max-w-md mx-auto text-center">
+            <div class="mb-10 space-y-2">
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/80 border border-rose-200 text-rose-600 text-xs font-medium shadow-sm">
+                    <img class="icon-heart w-3.5 h-3.5 object-contain" alt="Heart">
+                    <span>MENGLEANG AND kIMCHHORNG'S LOVE STORY</span>
+                    <img class="icon-heart w-3.5 h-3.5 object-contain" alt="Heart">
+                </span>
+                <h2 class="font-serifEn text-2xl sm:text-3xl font-bold text-rose-900">
+                    Happy Anniversary Oun sml
+                </h2>
+                <p class="text-sm text-rose-700/90">
+                    There is a special letter waiting for you...
+                </p>
+            </div>
+
+            <div class="envelope-scene my-6 py-4" onclick="openEnvelope()">
+                <div id="envelope-3d" class="envelope-wrapper">
+                    <div id="envelope-burst-container" class="absolute inset-0 pointer-events-none z-30"></div>
+                    <div class="envelope-back"></div>
+
+                    <div class="envelope-letter-preview">
+                        <span class="text-xs font-serifEn italic text-rose-400 mb-1">My Dearest Love</span>
+                        <h3 class="text-sm font-bold text-rose-900 mb-1 flex items-center justify-center gap-1">
+                            <span>Happy Anniversary</span>
+                            <img class="icon-heart w-4 h-4 object-contain" alt="Heart">
+                        </h3>
+                        <p class="text-[11px] text-rose-700/80 line-clamp-2 px-2 leading-relaxed">
+                            Thank you for your love and sweet smiles throughout all our beautiful days...
+                        </p>
+                        <div class="mt-3 flex gap-1.5 items-center justify-center">
+                            <img class="icon-heart w-3.5 h-3.5 object-contain" alt="Heart">
+                            <img class="icon-flower w-4 h-4 object-contain" alt="Flower">
+                            <img class="icon-heart w-3.5 h-3.5 object-contain" alt="Heart">
+                        </div>
+                    </div>
+
+                    <div class="envelope-pocket">
+                        <div class="pocket-left"></div>
+                        <div class="pocket-right"></div>
+                        <div class="pocket-bottom"></div>
+                    </div>
+                    <div class="envelope-flap"></div>
+
+                    <div class="wax-seal" title="Click to open letter">
+                        <img class="icon-heart w-7 h-7 object-contain drop-shadow" alt="Heart Seal">
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" 
+                    onclick="openEnvelope()"
+                    id="envelope-cta-btn"
+                    class="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/85 hover:bg-white text-rose-700 font-medium text-sm shadow-lg shadow-rose-300/40 border border-rose-200 transition-all hover:scale-105 active:scale-95">
+                <span>Happy Anniversary — Tap Here to Open</span>
+                <img class="icon-heart w-4 h-4 object-contain animate-bounce" alt="Heart">
+            </button>
+        </section>
+
+        <!-- =====================================================
+             STAGE 3: THE LOVE LETTER, PHOTO STACK & 3 GIFTS
+             ===================================================== -->
+        <section id="stage-letter" class="stage-screen stage-hidden w-full max-w-xl mx-auto">
+            <div class="stationery-paper rounded-3xl p-6 sm:p-10 relative overflow-hidden">
+                
+                <!-- Corner Coded Flower Graphics -->
+                <img class="icon-flower absolute top-4 right-5 w-7 h-7 object-contain opacity-80 pointer-events-none" alt="Flower">
+                <img class="icon-flower absolute top-4 left-5 w-7 h-7 object-contain opacity-80 pointer-events-none transform -scale-x-100" alt="Flower">
+
+                <!-- Header Badge -->
+                <div class="text-center mb-6">
+                    <p class="font-serifEn italic text-rose-500 text-sm tracking-widest">Happy Anniversary</p>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-rose-900 mt-1 flex items-center justify-center gap-2">
+                        <span>CHHORNG</span>
+                        <img class="icon-heart w-7 h-7 sm:w-8 sm:h-8 object-contain inline-block animate-pulse" alt="Heart">
+                        <span>LEANG</span>
+                    </h1>
+                    <p id="couple-names-display" class="text-xs text-rose-600/80 mt-1 font-medium">
+                        From leang, to the most special person in my life
+                    </p>
+                </div>
+
+                <!-- Live Time Counter (Started Nov 9, 2025 at 12:00 AM) -->
+                <div class="bg-gradient-to-br from-rose-50/90 to-pink-100/80 border border-rose-200/80 rounded-2xl p-4 sm:p-5 mb-8 text-center shadow-inner">
+                    <p class="text-xs font-medium text-rose-700 mb-3 flex items-center justify-center gap-1.5">
+                        <span class="inline-block w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                        <span>Time we've been in love:</span>
+                    </p>
+                    
+                    <div class="grid grid-cols-4 gap-2 sm:gap-3">
+                        <div class="bg-white/90 rounded-xl py-2.5 px-1 shadow-sm border border-rose-100">
+                            <div id="counter-days" class="text-xl sm:text-2xl font-bold text-rose-600 font-sansEn">0</div>
+                            <div class="text-[11px] text-rose-800/80 font-medium mt-0.5">Days</div>
+                        </div>
+                        <div class="bg-white/90 rounded-xl py-2.5 px-1 shadow-sm border border-rose-100">
+                            <div id="counter-hours" class="text-xl sm:text-2xl font-bold text-rose-600 font-sansEn">00</div>
+                            <div class="text-[11px] text-rose-800/80 font-medium mt-0.5">Hours</div>
+                        </div>
+                        <div class="bg-white/90 rounded-xl py-2.5 px-1 shadow-sm border border-rose-100">
+                            <div id="counter-minutes" class="text-xl sm:text-2xl font-bold text-rose-600 font-sansEn">00</div>
+                            <div class="text-[11px] text-rose-800/80 font-medium mt-0.5">Minutes</div>
+                        </div>
+                        <div class="bg-white/90 rounded-xl py-2.5 px-1 shadow-sm border border-rose-100">
+                            <div id="counter-seconds" class="text-xl sm:text-2xl font-bold text-rose-500 font-sansEn">00</div>
+                            <div class="text-[11px] text-rose-800/80 font-medium mt-0.5">Seconds</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Polaroid Photo Frame -->
+                <div class="relative max-w-xs mx-auto my-8">
+                    <div class="washi-tape"></div>
+
+                    <div class="polaroid-card rounded-xl">
+                        <div class="relative aspect-[4/4] w-full rounded-lg overflow-hidden bg-rose-100 group">
+                            <img id="couple-photo-img" 
+                                 src="image/image.png"
+                                 data-base="image"
+                                 onerror="smartPhotoFallback(this, 0)"
+                                 alt="Our Anniversary Memory" 
+                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                            
+                            <div class="absolute inset-0 bg-gradient-to-t from-rose-950/35 via-transparent to-transparent pointer-events-none"></div>
+
+                            <label for="photo-upload-input" 
+                                   class="absolute bottom-2.5 right-2.5 cursor-pointer bg-white/90 hover:bg-white text-rose-700 text-[11px] font-medium px-3 py-1.5 rounded-full shadow-md backdrop-blur-sm flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95">
+                                <svg class="w-3.5 h-3.5 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </label>
+                            <input id="photo-upload-input" type="file" accept="image/*" class="hidden" onchange="previewCouplePhoto(event)">
+                        </div>
+
+                        <div class="pt-4 pb-1 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <p id="polaroid-caption" class="font-serifEn italic text-rose-900 text-base sm:text-lg font-medium">
+                                    Loving You Every Single Day
+                                </p>
+                                <img class="icon-heart w-4 h-4 object-contain" alt="Heart">
+                            </div>
+                            <p id="anniversary-date-badge" class="text-[11px] text-rose-400 font-sansEn tracking-wider mt-0.5">
+                                OUR SPECIAL DAY
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Heartfelt Anniversary Letter -->
+                <article class="mt-8 space-y-4 text-rose-950 leading-[2] text-sm sm:text-base font-normal px-1 sm:px-3">
+                    <p class="font-semibold text-rose-800 text-base sm:text-lg" id="letter-greeting">
+                        To my dearest love,
+                    </p>
+
+                    <p id="letter-body-1" class="text-justify">
+                        Happy Anniversary to us! Every single second spent by your side has been meaningful and truly blissful. Thank you for walking into my life and making my entire world infinitely brighter, warmer, and full of joy.
+                    </p>
+
+                    <p id="letter-body-2" class="text-justify">
+                        Thank you for every bright smile, your sweet care, your patience, and the unconditional warmth you give me, even during moments when I am far from perfect. Every memory, shared laugh, and little adventure we’ve experienced together is a priceless treasure to me.
+                    </p>
+
+                    <p id="letter-body-3" class="text-justify">
+                        I promise to always hold your hand, stand by you, and love you deeper with each passing day and every new year. May our love continue to stay tender, sweet, and unwavering forever and always.
+                    </p>
+
+                    <div class="pt-4 text-right">
+                        <p class="text-xs text-rose-500 font-serifEn italic">With all my heart, forever & always,</p>
+                        <p id="letter-signature" class="text-base sm:text-lg font-bold text-rose-700 mt-1 inline-flex items-center justify-end gap-1.5">
+                            <span>Yours forever, with all my love Kimchhorng</span>
+                            <img class="icon-heart w-5 h-5 object-contain" alt="Heart">
+                        </p>
+                    </div>
+                </article>
+
+                <!-- 5-Photo Layered Slide Stack -->
+                <div class="mt-14 pt-8 border-t border-rose-200/70">
+                    <div class="text-center mb-6">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-100 text-rose-700 text-[11px] font-semibold tracking-wider uppercase">
+                            <img class="icon-flower w-3.5 h-3.5 object-contain" alt="Flower">
+                            <span>Our Layered Memories</span>
+                        </span>
+                        <h2 class="text-xl sm:text-2xl font-bold text-rose-900 font-serifEn mt-1.5 flex items-center justify-center gap-2">
+                            <span>Moments We Treasure</span>
+                            <img class="icon-heart w-6 h-6 object-contain" alt="Heart">
+                        </h2>
+                        <p class="text-xs text-rose-600/80 mt-1">
+                            Click or tap the photo to slide to the one behind it!
+                        </p>
+                        <div class="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 bg-white/90 border border-rose-200 rounded-full shadow-xs text-xs font-semibold text-rose-700">
+                            <span>Photo</span>
+                            <span id="stack-counter" class="text-rose-600 font-bold">1 of 5</span>
+                        </div>
+                    </div>
+
+                    <div class="stack-wrapper" id="photo-stack" onclick="cycleNextCard()">
+                        
+                        <!-- Photo Layer 1 -->
+                        <div class="stack-card" data-index="1">
+                            <div class="w-full h-[230px] rounded-xl overflow-hidden bg-rose-100">
+                                <img src="image/img1.png" 
+                                     data-base="img1"
+                                     onerror="smartPhotoFallback(this, 1)"
+                                     alt="Our Memory 1" 
+                                     class="w-full h-full object-cover pointer-events-none">
+                            </div>
+                            <div class="pt-3 text-center">
+                                <h4 class="text-sm font-bold text-rose-900">You make my entire world brighter just by being in it.</h4>
+                            </div>
+                        </div>
+
+                        <!-- Photo Layer 2 -->
+                        <div class="stack-card" data-index="2">
+                            <div class="w-full h-[230px] rounded-xl overflow-hidden bg-rose-100">
+                                <img src="image/img2.png" 
+                                     data-base="img2"
+                                     onerror="smartPhotoFallback(this, 2)"
+                                     alt="Our Memory 2" 
+                                     class="w-full h-full object-cover pointer-events-none">
+                            </div>
+                            <div class="pt-3 text-center">
+                                <h4 class="text-sm font-bold text-rose-900">My favorite part of every day will always be you.</h4>
+                            </div>
+                        </div>
+
+                        <!-- Photo Layer 3 -->
+                        <div class="stack-card" data-index="3">
+                            <div class="w-full h-[230px] rounded-xl overflow-hidden bg-rose-100">
+                                <img src="image/img3.png" 
+                                     data-base="img3"
+                                     onerror="smartPhotoFallback(this, 3)"
+                                     alt="Our Memory 3" 
+                                     class="w-full h-full object-cover pointer-events-none">
+                            </div>
+                            <div class="pt-3 text-center">
+                                <h4 class="text-sm font-bold text-rose-900">Loving you is the easiest and best decision I've ever made.</h4>
+                            </div>
+                        </div>
+
+                        <!-- Photo Layer 4 -->
+                        <div class="stack-card" data-index="4">
+                            <div class="w-full h-[230px] rounded-xl overflow-hidden bg-rose-100">
+                                <img src="image/img4.png" 
+                                     data-base="img4"
+                                     onerror="smartPhotoFallback(this, 4)"
+                                     alt="Our Memory 4" 
+                                     class="w-full h-full object-cover pointer-events-none">
+                            </div>
+                            <div class="pt-3 text-center">
+                                <h4 class="text-sm font-bold text-rose-900">You are my safe place, my best friend, and my whole heart.</h4>
+                            </div>
+                        </div>
+
+                        <!-- Photo Layer 5 -->
+                        <div class="stack-card" data-index="5">
+                            <div class="w-full h-[230px] rounded-xl overflow-hidden bg-rose-100">
+                                <img src="image/img5.png" 
+                                     data-base="img5"
+                                     onerror="smartPhotoFallback(this, 5)"
+                                     alt="Our Memory 5" 
+                                     class="w-full h-full object-cover pointer-events-none">
+                            </div>
+                            <div class="pt-3 text-center">
+                                <h4 class="text-sm font-bold text-rose-900">Forever & Beyond</h4>
+                                <p class="text-xs text-rose-600 font-serifEn italic mt-0.5">I love you more with every heartbeat</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <button type="button" 
+                                onclick="cycleNextCard()"
+                                class="inline-flex items-center gap-1.5 text-xs text-rose-500 hover:text-rose-700 font-medium py-1 px-3 rounded-full hover:bg-rose-100/60 transition-all">
+                            <span>Tap photo or click here to slide next</span>
+                            <span class="text-sm font-bold">➔</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- =======================================================
+                     3 SPECIAL GIFTS BUILT 100% WITH CODE (CUSTOM SVG)
+                     ======================================================= -->
+                <div class="mt-14 pt-8 border-t border-rose-200/70">
+                    <div class="text-center mb-6">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-100 text-rose-700 text-[11px] font-semibold tracking-wider uppercase">
+                            <img class="icon-gift w-4 h-4 object-contain" alt="Gift">
+                            <span>Surprise For You</span>
+                        </span>
+                        <h2 class="text-xl sm:text-2xl font-bold text-rose-900 font-serifEn mt-1.5 flex items-center justify-center gap-2">
+                            <span>Pick Your Anniversary Gift</span>
+                            <img class="icon-heart w-6 h-6 object-contain" alt="Heart">
+                        </h2>
+                        <p class="text-xs text-rose-600/80 mt-1">
+                            Choose any gift box below to open your special surprise!
+                        </p>
+                    </div>
+
+                    <!-- 3 Coded Gift Boxes Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-lg mx-auto">
+                        
+                        <!-- Gift Box 1 (Ruby Red & Gold Box) -->
+                        <div class="gift-card bg-white/95 border-2 border-rose-200 rounded-2xl p-4 text-center shadow-md flex flex-col items-center justify-center min-h-[190px] relative overflow-hidden"
+                             onclick="openGiftBox(this)">
+                            <div class="gift-svg-wrapper w-24 h-24 mb-2 flex items-center justify-center">
+                                <svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-md overflow-visible">
+                                    <defs>
+                                        <linearGradient id="boxRed" x1="0" y1="0" x2="1" y2="1">
+                                            <stop offset="0%" stop-color="#fb7185"/>
+                                            <stop offset="100%" stop-color="#e11d48"/>
+                                        </linearGradient>
+                                        <linearGradient id="goldRibbon" x1="0" y1="0" x2="1" y2="0">
+                                            <stop offset="0%" stop-color="#fef08a"/>
+                                            <stop offset="50%" stop-color="#facc15"/>
+                                            <stop offset="100%" stop-color="#ca8a04"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Box Base -->
+                                    <rect x="20" y="48" width="80" height="58" rx="8" fill="url(#boxRed)"/>
+                                    <rect x="52" y="48" width="16" height="58" fill="url(#goldRibbon)"/>
+                                    <rect x="20" y="70" width="80" height="12" fill="url(#goldRibbon)"/>
+                                    <!-- Animated Lid & Bow -->
+                                    <g class="gift-lid-group">
+                                        <path d="M60 36 C36 10 18 28 46 38 Z" fill="url(#goldRibbon)"/>
+                                        <path d="M60 36 C84 10 102 28 74 38 Z" fill="url(#goldRibbon)"/>
+                                        <circle cx="60" cy="34" r="6" fill="#ca8a04"/>
+                                        <rect x="14" y="34" width="92" height="18" rx="6" fill="#be123c"/>
+                                        <rect x="52" y="34" width="16" height="18" fill="url(#goldRibbon)"/>
+                                    </g>
+                                </svg>
+                            </div>
+                            <span class="text-xs font-bold text-rose-800 tracking-wide uppercase">Gift Box #1</span>
+                            <span class="gift-status-label text-[11px] text-rose-500 mt-1">Tap to open</span>
+                        </div>
+
+                        <!-- Gift Box 2 (Blush Pink & Rose Ribbon Box) -->
+                        <div class="gift-card bg-white/95 border-2 border-rose-200 rounded-2xl p-4 text-center shadow-md flex flex-col items-center justify-center min-h-[190px] relative overflow-hidden"
+                             onclick="openGiftBox(this)">
+                            <div class="gift-svg-wrapper w-24 h-24 mb-2 flex items-center justify-center">
+                                <svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-md overflow-visible">
+                                    <defs>
+                                        <linearGradient id="boxPink" x1="0" y1="0" x2="1" y2="1">
+                                            <stop offset="0%" stop-color="#fecdd3"/>
+                                            <stop offset="100%" stop-color="#fda4af"/>
+                                        </linearGradient>
+                                        <linearGradient id="crimsonRibbon" x1="0" y1="0" x2="1" y2="0">
+                                            <stop offset="0%" stop-color="#f43f5e"/>
+                                            <stop offset="100%" stop-color="#9f1239"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Box Base -->
+                                    <rect x="20" y="48" width="80" height="58" rx="8" fill="url(#boxPink)" stroke="#fda4af" stroke-width="1.5"/>
+                                    <rect x="52" y="48" width="16" height="58" fill="url(#crimsonRibbon)"/>
+                                    <rect x="20" y="70" width="80" height="12" fill="url(#crimsonRibbon)"/>
+                                    <!-- Animated Lid & Bow -->
+                                    <g class="gift-lid-group">
+                                        <path d="M60 36 C36 10 18 28 46 38 Z" fill="url(#crimsonRibbon)"/>
+                                        <path d="M60 36 C84 10 102 28 74 38 Z" fill="url(#crimsonRibbon)"/>
+                                        <circle cx="60" cy="34" r="6" fill="#881337"/>
+                                        <rect x="14" y="34" width="92" height="18" rx="6" fill="#fb7185"/>
+                                        <rect x="52" y="34" width="16" height="18" fill="url(#crimsonRibbon)"/>
+                                    </g>
+                                </svg>
+                            </div>
+                            <span class="text-xs font-bold text-rose-800 tracking-wide uppercase">Gift Box #2</span>
+                            <span class="gift-status-label text-[11px] text-rose-500 mt-1">Tap to open</span>
+                        </div>
+
+                        <!-- Gift Box 3 (Royal Berry & Pearl Ribbon Box) -->
+                        <div class="gift-card bg-white/95 border-2 border-rose-200 rounded-2xl p-4 text-center shadow-md flex flex-col items-center justify-center min-h-[190px] relative overflow-hidden"
+                             onclick="openGiftBox(this)">
+                            <div class="gift-svg-wrapper w-24 h-24 mb-2 flex items-center justify-center">
+                                <svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-md overflow-visible">
+                                    <defs>
+                                        <linearGradient id="boxBerry" x1="0" y1="0" x2="1" y2="1">
+                                            <stop offset="0%" stop-color="#e11d48"/>
+                                            <stop offset="100%" stop-color="#881337"/>
+                                        </linearGradient>
+                                        <linearGradient id="pearlRibbon" x1="0" y1="0" x2="1" y2="0">
+                                            <stop offset="0%" stop-color="#fff1f2"/>
+                                            <stop offset="100%" stop-color="#fecdd3"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Box Base -->
+                                    <rect x="20" y="48" width="80" height="58" rx="8" fill="url(#boxBerry)"/>
+                                    <rect x="52" y="48" width="16" height="58" fill="url(#pearlRibbon)"/>
+                                    <rect x="20" y="70" width="80" height="12" fill="url(#pearlRibbon)"/>
+                                    <!-- Animated Lid & Bow -->
+                                    <g class="gift-lid-group">
+                                        <path d="M60 36 C36 10 18 28 46 38 Z" fill="url(#pearlRibbon)"/>
+                                        <path d="M60 36 C84 10 102 28 74 38 Z" fill="url(#pearlRibbon)"/>
+                                        <circle cx="60" cy="34" r="6" fill="#fda4af"/>
+                                        <rect x="14" y="34" width="92" height="18" rx="6" fill="#9f1239"/>
+                                        <rect x="52" y="34" width="16" height="18" fill="url(#pearlRibbon)"/>
+                                    </g>
+                                </svg>
+                            </div>
+                            <span class="text-xs font-bold text-rose-800 tracking-wide uppercase">Gift Box #3</span>
+                            <span class="gift-status-label text-[11px] text-rose-500 mt-1">Tap to open</span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="mt-10 pt-6 border-t border-rose-200/70 flex flex-wrap items-center justify-center gap-3">
+                    <button type="button" 
+                            onclick="triggerCelebrationHearts()"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white text-xs sm:text-sm font-medium shadow-md shadow-rose-300/60 transition-all hover:scale-105 active:scale-95">
+                        <span>Send Hearts</span>
+                        <img class="icon-heart w-4 h-4 object-contain" alt="Heart">
+                    </button>
+
+                    <button type="button" 
+                            onclick="replayEnvelope()"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-rose-100 hover:bg-rose-200/80 text-rose-800 text-xs sm:text-sm font-medium transition-all active:scale-95">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                        <span>Close Letter (Replay)</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const CONFIG = {
+            secretPin: "091125",
+            anniversaryStartDate: "2025-11-09T00:00:00",
+            coupleSubtitle: "From leang, to the most special person in my life",
+            polaroidCaption: "Loving You Every Single Day",
+            customMp3Url: ""
+        };
+
+        /* =======================================================
+           100% CODE-GENERATED ILLUSTRATIONS (ZERO INTERNET URLS)
+           ======================================================= */
+        const GRAPHICS = {
+            // 3D Glossy Heart
+            heart: "data:image/svg+xml;utf8," + encodeURIComponent(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+                    <defs>
+                        <radialGradient id="hg" cx="35%" cy="30%" r="70%">
+                            <stop offset="0%" stop-color="#ff8fa3"/>
+                            <stop offset="45%" stop-color="#f43f5e"/>
+                            <stop offset="100%" stop-color="#9f1239"/>
+                        </radialGradient>
+                    </defs>
+                    <path fill="url(#hg)" d="M60 105 C60 105 12 73 12 39 C12 21 26 10 42 10 C51 10 57 15 60 22 C63 15 69 10 78 10 C94 10 108 21 108 39 C108 73 60 105 60 105 Z"/>
+                    <ellipse cx="36" cy="30" rx="10" ry="6" transform="rotate(-25 36 30)" fill="#ffffff" opacity="0.45"/>
+                </svg>`),
+
+            // Sparkling Heart with Gold Stars
+            sparkleHeart: "data:image/svg+xml;utf8," + encodeURIComponent(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+                    <defs>
+                        <radialGradient id="shg" cx="35%" cy="30%" r="70%">
+                            <stop offset="0%" stop-color="#fda4af"/>
+                            <stop offset="50%" stop-color="#e11d48"/>
+                            <stop offset="100%" stop-color="#881337"/>
+                        </radialGradient>
+                    </defs>
+                    <path fill="url(#shg)" d="M60 102 C60 102 14 72 14 40 C14 23 27 12 43 12 C51 12 57 17 60 24 C63 17 69 12 77 12 C93 12 106 23 106 40 C106 72 60 102 60 102 Z"/>
+                    <path fill="#facc15" d="M22 10 L25 20 L35 23 L25 26 L22 36 L19 26 L9 23 L19 20 Z"/>
+                    <path fill="#fef08a" d="M96 68 L98 75 L105 77 L98 79 L96 86 L94 79 L87 77 L94 75 Z"/>
+                    <ellipse cx="38" cy="32" rx="9" ry="5" transform="rotate(-25 38 32)" fill="#ffffff" opacity="0.5"/>
+                </svg>`),
+
+            // 5-Petal Pink Cherry Blossom
+            flower: "data:image/svg+xml;utf8," + encodeURIComponent(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+                    <defs>
+                        <radialGradient id="pg" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#fff1f2"/>
+                            <stop offset="65%" stop-color="#fb7185"/>
+                            <stop offset="100%" stop-color="#e11d48"/>
+                        </radialGradient>
+                    </defs>
+                    <circle cx="60" cy="26" r="22" fill="url(#pg)"/>
+                    <circle cx="92" cy="49" r="22" fill="url(#pg)"/>
+                    <circle cx="80" cy="87" r="22" fill="url(#pg)"/>
+                    <circle cx="40" cy="87" r="22" fill="url(#pg)"/>
+                    <circle cx="28" cy="49" r="22" fill="url(#pg)"/>
+                    <circle cx="60" cy="58" r="15" fill="#facc15" stroke="#f59e0b" stroke-width="3"/>
+                </svg>`),
+
+            // Detailed Red Rose with Stem & Leaves
+            rose: "data:image/svg+xml;utf8," + encodeURIComponent(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+                    <path d="M60 62 L60 112" stroke="#15803d" stroke-width="7" stroke-linecap="round"/>
+                    <path d="M60 90 Q85 75 90 90 Q74 104 60 90 Z" fill="#22c55e"/>
+                    <path d="M60 80 Q35 65 30 80 Q46 94 60 80 Z" fill="#16a34a"/>
+                    <circle cx="60" cy="44" r="28" fill="#be123c"/>
+                    <path d="M36 42 C42 20 78 20 84 42 C76 64 44 64 36 42 Z" fill="#e11d48"/>
+                    <path d="M44 38 C48 26 72 26 76 38 C70 52 50 52 44 38 Z" fill="#fb7185"/>
+                    <ellipse cx="60" cy="36" rx="10" ry="7" fill="#9f1239"/>
+                </svg>`),
+
+            // Romantic Pink Tulip
+            tulip: "data:image/svg+xml;utf8," + encodeURIComponent(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+                    <path d="M60 65 L60 112" stroke="#16a34a" stroke-width="7" stroke-linecap="round"/>
+                    <path d="M60 95 Q85 75 82 62 Q68 75 60 95 Z" fill="#22c55e"/>
+                    <path d="M60 95 Q35 75 38 62 Q52 75 60 95 Z" fill="#22c55e"/>
+                    <path d="M36 45 C36 20 60 14 60 36 C60 14 84 20 84 45 C84 65 60 72 60 72 C60 72 36 65 36 45 Z" fill="#f43f5e"/>
+                    <path d="M46 46 C46 24 60 16 60 16 C60 16 74 24 74 46 C74 62 60 68 60 68 C60 68 46 62 46 46 Z" fill="#fb7185"/>
+                </svg>`),
+
+            // Full Romantic Flower Bouquet wrapped in kraft paper & ribbon
+            bouquet: "data:image/svg+xml;utf8," + encodeURIComponent(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+                    <!-- Paper Wrapper Back -->
+                    <polygon points="30,65 130,65 100,145 60,145" fill="#fecdd3" stroke="#fda4af" stroke-width="2"/>
+                    <!-- Leaves -->
+                    <circle cx="48" cy="52" r="18" fill="#22c55e"/>
+                    <circle cx="112" cy="52" r="18" fill="#16a34a"/>
+                    <circle cx="80" cy="36" r="20" fill="#15803d"/>
+                    <!-- Flowers in Bouquet -->
+                    <circle cx="55" cy="56" r="18" fill="#e11d48"/>
+                    <circle cx="55" cy="56" r="9" fill="#fda4af"/>
+                    <circle cx="105" cy="56" r="18" fill="#f43f5e"/>
+                    <circle cx="105" cy="56" r="9" fill="#ffe4e6"/>
+                    <circle cx="80" cy="44" r="20" fill="#fb7185"/>
+                    <circle cx="80" cy="44" r="10" fill="#fef08a"/>
+                    <circle cx="80" cy="68" r="17" fill="#be123c"/>
+                    <circle cx="80" cy="68" r="8" fill="#fda4af"/>
+                    <!-- Front Wrapper Cone -->
+                    <polygon points="36,75 124,75 94,148 66,148" fill="#fff1f2" stroke="#fda4af" stroke-width="2"/>
+                    <!-- Satin Bow -->
+                    <rect x="63" y="106" width="34" height="10" rx="5" fill="#e11d48"/>
+                    <path d="M80 111 C62 95 52 115 74 115 Z" fill="#f43f5e"/>
+                    <path d="M80 111 C98 95 108 115 86 115 Z" fill="#f43f5e"/>
+                    <circle cx="80" cy="111" r="5" fill="#9f1239"/>
+                </svg>`),
+
+            // Gift Icon
+            gift: "data:image/svg+xml;utf8," + encodeURIComponent(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+                    <rect x="20" y="48" width="80" height="58" rx="8" fill="#f43f5e"/>
+                    <rect x="14" y="34" width="92" height="18" rx="6" fill="#e11d48"/>
+                    <rect x="53" y="34" width="14" height="72" fill="#fde047"/>
+                    <rect x="20" y="70" width="80" height="12" fill="#fde047"/>
+                    <path d="M60 34 C42 12 26 24 44 34 Z" fill="#eab308"/>
+                    <path d="M60 34 C78 12 94 24 76 34 Z" fill="#eab308"/>
+                </svg>`)
+        };
+
+        // Custom Coded Romantic Artwork Fallbacks (used only if local image/imgX.png is missing)
+        function createCodedMemoryIllustration(index) {
+            const palettes = [
+                { bg1: "#ffe4e6", bg2: "#fda4af", accent: "#e11d48" },
+                { bg1: "#fce7f3", bg2: "#f9a8d4", accent: "#db2777" },
+                { bg1: "#fff1f2", bg2: "#fecdd3", accent: "#f43f5e" },
+                { bg1: "#fdf2f8", bg2: "#fbcfe8", accent: "#be123c" },
+                { bg1: "#ffe4e6", bg2: "#fb7185", accent: "#9f1239" },
+                { bg1: "#fef2f2", bg2: "#fca5a5", accent: "#dc2626" }
+            ];
+            const pal = palettes[index % palettes.length];
+            return "data:image/svg+xml;utf8," + encodeURIComponent(`
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320">
+                    <defs>
+                        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="${pal.bg1}"/>
+                            <stop offset="100%" stop-color="${pal.bg2}"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="400" height="320" fill="url(#bg)"/>
+                    <circle cx="65" cy="60" r="35" fill="#ffffff" opacity="0.35"/>
+                    <circle cx="330" cy="250" r="55" fill="#ffffff" opacity="0.25"/>
+                    <!-- Center Floating Double Hearts -->
+                    <path fill="${pal.accent}" opacity="0.2" d="M250 220 C250 220 180 175 180 130 C180 105 200 90 222 90 C235 90 245 98 250 108 C255 98 265 90 278 90 C300 90 320 105 320 130 C320 175 250 220 250 220 Z"/>
+                    <path fill="${pal.accent}" d="M200 230 C200 230 115 172 115 115 C115 84 140 65 168 65 C184 65 195 74 200 86 C205 74 216 65 232 65 C260 65 285 84 285 115 C285 172 200 230 200 230 Z"/>
+                    <ellipse cx="158" cy="100" rx="16" ry="9" transform="rotate(-25 158 100)" fill="#ffffff" opacity="0.45"/>
+                </svg>`);
+        }
+
+        /* =======================================================
+           SMART AUTO-LOADER FOR YOUR LOCAL PC PHOTOS
+           Checks .png, .jpg, .jpeg in /image and root folder, then falls back to coded SVG
+           ======================================================= */
+        function smartPhotoFallback(imgEl, illustrationIndex) {
+            const base = imgEl.getAttribute('data-base');
+            if (!base) {
+                imgEl.onerror = null;
+                imgEl.src = createCodedMemoryIllustration(illustrationIndex);
+                return;
+            }
+            const candidates = [
+                `image/${base}.jpg`,
+                `image/${base}.jpeg`,
+                `${base}.png`,
+                `${base}.jpg`,
+                `${base}.jpeg`
+            ];
+            let step = parseInt(imgEl.getAttribute('data-try-step') || '0', 10);
+            if (step < candidates.length) {
+                imgEl.setAttribute('data-try-step', String(step + 1));
+                imgEl.src = candidates[step];
+            } else {
+                imgEl.onerror = null;
+                imgEl.src = createCodedMemoryIllustration(illustrationIndex);
+            }
+        }
+
+        // Coded Graphic Array for Full-Screen Explosion
+        const BURST_CODED_GRAPHICS = [
+            GRAPHICS.heart,
+            GRAPHICS.sparkleHeart,
+            GRAPHICS.flower,
+            GRAPHICS.rose,
+            GRAPHICS.tulip,
+            GRAPHICS.bouquet
+        ];
+
+        function applyCodedIcons() {
+            document.querySelectorAll('.icon-heart').forEach(el => el.src = GRAPHICS.heart);
+            document.querySelectorAll('.icon-sparkle-heart').forEach(el => el.src = GRAPHICS.sparkleHeart);
+            document.querySelectorAll('.icon-flower').forEach(el => el.src = GRAPHICS.flower);
+            document.querySelectorAll('.icon-rose').forEach(el => el.src = GRAPHICS.rose);
+            document.querySelectorAll('.icon-tulip').forEach(el => el.src = GRAPHICS.tulip);
+            document.querySelectorAll('.icon-bouquet').forEach(el => el.src = GRAPHICS.bouquet);
+            document.querySelectorAll('.icon-gift').forEach(el => el.src = GRAPHICS.gift);
+        }
+
+        let currentPinInput = "";
+        let isEnvelopeOpening = false;
+        let counterInterval = null;
+
+        const startTimestamp = new Date(CONFIG.anniversaryStartDate).getTime();
+
+        /* =======================================================
+           OPEN GIFT BOX -> FULL SCREEN POPUP & CODED EXPLOSION
+           ======================================================= */
+        function openGiftBox(cardEl) {
+            cardEl.classList.add('is-opened');
+            const label = cardEl.querySelector('.gift-status-label');
+            if (label) {
+                label.textContent = "Opened - Tap again";
+                label.classList.replace('text-rose-500', 'text-rose-700');
+                label.classList.add('font-semibold');
+            }
+
+            playSuccessChime();
+            triggerFullScreenFlowerHeartExplosion();
+
+            const modal = document.getElementById('gift-fullscreen-modal');
+            modal.classList.add('active');
+        }
+
+        function closeGiftModal() {
+            const modal = document.getElementById('gift-fullscreen-modal');
+            modal.classList.remove('active');
+            playKeyTone(440, 0.05);
+        }
+
+        function triggerFullScreenFlowerHeartExplosion() {
+            const container = document.getElementById('fullscreen-burst-container');
+            const totalItems = 75;
+
+            for (let i = 0; i < totalItems; i++) {
+                const img = document.createElement('img');
+                img.className = 'fullscreen-burst-item object-contain';
+                img.src = BURST_CODED_GRAPHICS[Math.floor(Math.random() * BURST_CODED_GRAPHICS.length)];
+                img.alt = "Flower or Heart";
+
+                const tx = (Math.random() - 0.5) * window.innerWidth * 1.15 + 'px';
+                const ty = (Math.random() - 0.5) * window.innerHeight * 1.15 + 'px';
+                const scale = (Math.random() * 0.95 + 0.65).toFixed(2);
+                const rot = Math.floor((Math.random() - 0.5) * 360) + 'deg';
+                const dur = (Math.random() * 1.3 + 1.8).toFixed(2) + 's';
+                const size = Math.floor(Math.random() * 30 + 34) + 'px';
+
+                img.style.width = size;
+                img.style.height = size;
+                img.style.setProperty('--tx', tx);
+                img.style.setProperty('--ty', ty);
+                img.style.setProperty('--scale', scale);
+                img.style.setProperty('--rot', rot);
+                img.style.setProperty('--dur', dur);
+                img.style.animationDelay = (Math.random() * 0.35).toFixed(2) + 's';
+
+                container.appendChild(img);
+
+                setTimeout(() => {
+                    img.remove();
+                }, 3600);
+            }
+        }
+
+        /* Passcode Lock Logic (6 Digits) */
+        function updatePinDots() {
+            const dots = document.querySelectorAll('#pin-dots-container .pin-dot');
+            dots.forEach((dot, idx) => {
+                if (idx < currentPinInput.length) {
+                    dot.classList.add('bg-rose-500', 'scale-125', 'border-rose-500', 'shadow-sm', 'shadow-rose-400');
+                    dot.innerHTML = `<img src="${GRAPHICS.heart}" alt="Heart" class="w-2.5 h-2.5 object-contain">`;
+                } else {
+                    dot.classList.remove('bg-rose-500', 'scale-125', 'border-rose-500', 'shadow-sm', 'shadow-rose-400');
+                    dot.innerHTML = '';
+                }
+            });
+        }
+
+        function pressDigit(digit) {
+            if (currentPinInput.length >= CONFIG.secretPin.length) return;
+
+            playKeyTone(520 + parseInt(digit, 10) * 35, 0.06);
+
+            currentPinInput += digit;
+            updatePinDots();
+
+            const btn = document.querySelector(`button[data-key="${digit}"]`);
+            if (btn) {
+                btn.classList.add('pressed');
+                setTimeout(() => btn.classList.remove('pressed'), 140);
+            }
+
+            if (currentPinInput.length === CONFIG.secretPin.length) {
+                setTimeout(verifyPin, 180);
+            }
+        }
+
+        function backspacePin() {
+            if (currentPinInput.length > 0) {
+                playKeyTone(380, 0.05);
+                currentPinInput = currentPinInput.slice(0, -1);
+                updatePinDots();
+            }
+        }
+
+        function clearPin() {
+            playKeyTone(320, 0.06);
+            currentPinInput = "";
+            updatePinDots();
+        }
+
+        function toggleHint() {
+            const hintBox = document.getElementById('pin-hint-box');
+            hintBox.classList.toggle('hidden');
+        }
+
+        function autoFillPin() {
+            currentPinInput = "";
+            updatePinDots();
+            const target = CONFIG.secretPin;
+            target.split('').forEach((char, i) => {
+                setTimeout(() => pressDigit(char), i * 100);
+            });
+        }
+
+        function verifyPin() {
+            const feedback = document.getElementById('passcode-feedback');
+            const card = document.getElementById('passcode-card');
+
+            if (currentPinInput === CONFIG.secretPin) {
+                playSuccessChime();
+                feedback.innerHTML = `<span>Passcode correct! Welcome, my love</span> <img src="${GRAPHICS.heart}" alt="Heart" class="w-4 h-4 object-contain inline">`;
+                feedback.className = "text-xs text-emerald-600 font-semibold min-h-[20px] flex items-center justify-center gap-1";
+
+                setTimeout(() => {
+                    switchStage('stage-passcode', 'stage-envelope');
+                }, 450);
+            } else {
+                playErrorTone();
+                feedback.textContent = "Incorrect passcode, please try again";
+                feedback.className = "text-xs text-rose-600 font-semibold min-h-[20px]";
+
+                card.classList.remove('animate-shake');
+                void card.offsetWidth;
+                card.classList.add('animate-shake');
+
+                setTimeout(() => {
+                    currentPinInput = "";
+                    updatePinDots();
+                }, 420);
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            const stagePasscode = document.getElementById('stage-passcode');
+            if (!stagePasscode.classList.contains('stage-active')) return;
+
+            if (e.key >= '0' && e.key <= '9') {
+                pressDigit(e.key);
+            } else if (e.key === 'Backspace') {
+                backspacePin();
+            } else if (e.key === 'Escape' || e.key === 'Delete') {
+                clearPin();
+            }
+        });
+
+        /* Stage Navigation */
+        function switchStage(fromId, toId) {
+            const fromEl = document.getElementById(fromId);
+            const toEl = document.getElementById(toId);
+
+            fromEl.classList.remove('stage-active');
+            fromEl.classList.add('stage-hidden');
+
+            setTimeout(() => {
+                toEl.classList.remove('stage-hidden');
+                toEl.classList.add('stage-active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 320);
+        }
+
+        /* Envelope Opening & Burst */
+        function openEnvelope() {
+            if (isEnvelopeOpening) return;
+            isEnvelopeOpening = true;
+
+            const envelope = document.getElementById('envelope-3d');
+            const ctaBtn = document.getElementById('envelope-cta-btn');
+
+            startMusic();
+
+            envelope.classList.add('is-open');
+            ctaBtn.style.opacity = '0';
+            ctaBtn.style.pointerEvents = 'none';
+
+            spawnEnvelopeBurstImages();
+
+            setTimeout(() => {
+                switchStage('stage-envelope', 'stage-letter');
+                setTimeout(() => {
+                    triggerCelebrationHearts();
+                }, 400);
+            }, 1550);
+        }
+
+        function spawnEnvelopeBurstImages() {
+            const container = document.getElementById('envelope-burst-container');
+            container.innerHTML = '';
+
+            for (let i = 0; i < 18; i++) {
+                const img = document.createElement('img');
+                img.className = 'burst-item w-6 h-6 sm:w-7 sm:h-7 object-contain';
+                img.src = BURST_CODED_GRAPHICS[i % BURST_CODED_GRAPHICS.length];
+                img.alt = "Burst Graphic";
+
+                const tx = (Math.random() - 0.5) * 260 + 'px';
+                const ty = (-80 - Math.random() * 170) + 'px';
+                const rot = (Math.random() - 0.5) * 90 + 'deg';
+
+                img.style.setProperty('--tx', tx);
+                img.style.setProperty('--ty', ty);
+                img.style.setProperty('--rot', rot);
+                img.style.animationDelay = (Math.random() * 0.25) + 's';
+
+                container.appendChild(img);
+            }
+        }
+
+        function replayEnvelope() {
+            const envelope = document.getElementById('envelope-3d');
+            const ctaBtn = document.getElementById('envelope-cta-btn');
+
+            envelope.classList.remove('is-open');
+            ctaBtn.style.opacity = '1';
+            ctaBtn.style.pointerEvents = 'auto';
+            isEnvelopeOpening = false;
+
+            switchStage('stage-letter', 'stage-envelope');
+        }
+
+        /* Live Counter & Polaroid */
+        function updateLiveCounter() {
+            const now = Date.now();
+            const diffMs = Math.max(0, now - startTimestamp);
+
+            const totalSeconds = Math.floor(diffMs / 1000);
+            const days = Math.floor(totalSeconds / (3600 * 24));
+            const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            document.getElementById('counter-days').textContent = days;
+            document.getElementById('counter-hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('counter-minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('counter-seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        function previewCouplePhoto(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById('couple-photo-img');
+                img.src = e.target.result;
+                triggerCelebrationHearts();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        /* Layered Photo Stack Slide Logic */
+        let stackCards = [];
+        let isCyclingStack = false;
+
+        const STACK_LAYER_OFFSETS = [
+            { y: 0, scale: 1, rot: 0, opacity: 1, zIndex: 10 },
+            { y: 14, scale: 0.95, rot: -2.5, opacity: 0.9, zIndex: 9 },
+            { y: 28, scale: 0.90, rot: 2.5, opacity: 0.78, zIndex: 8 },
+            { y: 42, scale: 0.85, rot: -1.5, opacity: 0.62, zIndex: 7 },
+            { y: 56, scale: 0.80, rot: 1.5, opacity: 0.45, zIndex: 6 }
+        ];
+
+        function initPhotoStack() {
+            stackCards = Array.from(document.querySelectorAll('#photo-stack .stack-card'));
+            updateStackLayers();
+        }
+
+        function updateStackLayers() {
+            stackCards.forEach((card, index) => {
+                const layer = STACK_LAYER_OFFSETS[index];
+                card.style.zIndex = layer.zIndex;
+                card.style.opacity = layer.opacity;
+                card.style.transform = `translateY(${layer.y}px) scale(${layer.scale}) rotate(${layer.rot}deg)`;
+            });
+
+            if (stackCards.length > 0) {
+                const currentNum = stackCards[0].getAttribute('data-index');
+                const counterEl = document.getElementById('stack-counter');
+                if (counterEl) {
+                    counterEl.textContent = `${currentNum} of ${stackCards.length}`;
+                }
+            }
+        }
+
+        function cycleNextCard() {
+            if (isCyclingStack || stackCards.length <= 1) return;
+            isCyclingStack = true;
+
+            const topCard = stackCards[0];
+            playMusicBoxNote(587.33, 0.18);
+
+            topCard.classList.add('slide-exit');
+
+            setTimeout(() => {
+                topCard.classList.remove('slide-exit');
+                stackCards.push(stackCards.shift());
+                updateStackLayers();
+
+                setTimeout(() => {
+                    isCyclingStack = false;
+                }, 140);
+            }, 360);
+        }
+
+        /* Audio Synthesizer */
+        let audioCtx = null;
+        let isMusicPlaying = false;
+        let melodyTimer = null;
+        let noteIndex = 0;
+
+        const MELODY_NOTES = [
+            { freq: 587.33, dur: 0.45 },
+            { freq: 440.00, dur: 0.45 },
+            { freq: 493.88, dur: 0.45 },
+            { freq: 369.99, dur: 0.45 },
+            { freq: 392.00, dur: 0.45 },
+            { freq: 293.66, dur: 0.45 },
+            { freq: 392.00, dur: 0.45 },
+            { freq: 440.00, dur: 0.45 },
+            { freq: 659.25, dur: 0.45 },
+            { freq: 587.33, dur: 0.45 },
+            { freq: 554.37, dur: 0.45 },
+            { freq: 493.88, dur: 0.45 },
+            { freq: 440.00, dur: 0.45 },
+            { freq: 392.00, dur: 0.45 },
+            { freq: 369.99, dur: 0.45 },
+            { freq: 329.63, dur: 0.45 },
+            { freq: 293.66, dur: 0.45 },
+            { freq: 369.99, dur: 0.45 },
+            { freq: 440.00, dur: 0.45 },
+            { freq: 587.33, dur: 0.65 },
+            { freq: 493.88, dur: 0.45 },
+            { freq: 587.33, dur: 0.45 },
+            { freq: 440.00, dur: 0.90 }
+        ];
+
+        function initAudioContext() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) audioCtx = new AudioContextClass();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playMusicBoxNote(freq, duration = 0.5) {
+            initAudioContext();
+            if (!audioCtx) return;
+
+            const now = audioCtx.currentTime;
+            const osc1 = audioCtx.createOscillator();
+            const osc2 = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            osc1.type = 'sine';
+            osc1.frequency.setValueAtTime(freq, now);
+
+            osc2.type = 'triangle';
+            osc2.frequency.setValueAtTime(freq * 2, now);
+
+            const overtoneGain = audioCtx.createGain();
+            overtoneGain.gain.setValueAtTime(0.03, now);
+
+            gainNode.gain.setValueAtTime(0.001, now);
+            gainNode.gain.linearRampToValueAtTime(0.11, now + 0.02);
+            gainNode.gain.exponentialRampToValueAtTime(0.0008, now + duration * 2.4);
+
+            osc1.connect(gainNode);
+            osc2.connect(overtoneGain);
+            overtoneGain.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            osc1.start(now);
+            osc2.start(now);
+            osc1.stop(now + duration * 2.5);
+            osc2.stop(now + duration * 2.5);
+        }
+
+        function playKeyTone(freq, dur = 0.06) {
+            initAudioContext();
+            if (!audioCtx) return;
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now);
+            gain.gain.setValueAtTime(0.05, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + dur);
+        }
+
+        function playSuccessChime() {
+            initAudioContext();
+            [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+                setTimeout(() => playMusicBoxNote(f, 0.35), i * 95);
+            });
+        }
+
+        function playErrorTone() {
+            initAudioContext();
+            [260, 210].forEach((f, i) => {
+                setTimeout(() => playKeyTone(f, 0.12), i * 110);
+            });
+        }
+
+        function scheduleNextMusicBoxNote() {
+            if (!isMusicPlaying) return;
+            const note = MELODY_NOTES[noteIndex];
+            playMusicBoxNote(note.freq, note.dur);
+            noteIndex = (noteIndex + 1) % MELODY_NOTES.length;
+            melodyTimer = setTimeout(scheduleNextMusicBoxNote, note.dur * 1000);
+        }
+
+        function startMusic() {
+            if (isMusicPlaying) return;
+
+            const customAudio = document.getElementById('custom-bgm');
+            if (CONFIG.customMp3Url) customAudio.src = CONFIG.customMp3Url;
+
+            isMusicPlaying = true;
+            updateMusicUI();
+
+            if (customAudio.getAttribute('src')) {
+                customAudio.play().catch(() => {
+                    initAudioContext();
+                    scheduleNextMusicBoxNote();
+                });
+            } else {
+                initAudioContext();
+                scheduleNextMusicBoxNote();
+            }
+        }
+
+        function stopMusic() {
+            isMusicPlaying = false;
+            clearTimeout(melodyTimer);
+            const customAudio = document.getElementById('custom-bgm');
+            if (customAudio) customAudio.pause();
+            updateMusicUI();
+        }
+
+        function toggleMusic() {
+            if (isMusicPlaying) stopMusic();
+            else startMusic();
+        }
+
+        function updateMusicUI() {
+            const statusText = document.getElementById('music-status-text');
+            const iconWrapper = document.getElementById('music-icon-wrapper');
+            if (isMusicPlaying) {
+                statusText.textContent = "Music: Playing";
+                iconWrapper.classList.add('music-playing-spin');
+            } else {
+                statusText.textContent = "Music: Off";
+                iconWrapper.classList.remove('music-playing-spin');
+            }
+        }
+
+        /* Floating Hearts Canvas */
+        const canvas = document.getElementById('hearts-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class HeartParticle {
+            constructor(isBurst = false) {
+                this.reset(isBurst);
+            }
+
+            reset(isBurst = false) {
+                this.x = isBurst ? (window.innerWidth / 2 + (Math.random() - 0.5) * 180) : Math.random() * canvas.width;
+                this.y = isBurst ? (window.innerHeight * 0.65) : (canvas.height + Math.random() * 100);
+                this.size = Math.random() * 11 + 6;
+                this.speedY = isBurst ? (Math.random() * 3.2 + 1.8) : (Math.random() * 0.85 + 0.35);
+                this.speedX = (Math.random() - 0.5) * (isBurst ? 2.5 : 0.6);
+                this.opacity = Math.random() * 0.45 + 0.2;
+                this.wobble = Math.random() * Math.PI * 2;
+                this.wobbleSpeed = Math.random() * 0.03 + 0.01;
+                this.color = ['#fb7185', '#f43f5e', '#fda4af', '#fecdd3'][Math.floor(Math.random() * 4)];
+            }
+
+            update() {
+                this.y -= this.speedY;
+                this.wobble += this.wobbleSpeed;
+                this.x += Math.sin(this.wobble) * 0.45 + this.speedX;
+
+                if (this.y < -30) this.reset(false);
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+
+                const s = this.size;
+                ctx.beginPath();
+                ctx.moveTo(0, s * 0.3);
+                ctx.bezierCurveTo(0, 0, -s * 0.5, 0, -s * 0.5, s * 0.3);
+                ctx.bezierCurveTo(-s * 0.5, s * 0.65, 0, s * 0.85, 0, s * 1.1);
+                ctx.bezierCurveTo(0, s * 0.85, s * 0.5, s * 0.65, s * 0.5, s * 0.3);
+                ctx.bezierCurveTo(s * 0.5, 0, 0, 0, 0, s * 0.3);
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const count = window.innerWidth < 640 ? 22 : 36;
+            for (let i = 0; i < count; i++) {
+                const p = new HeartParticle(false);
+                p.y = Math.random() * canvas.height;
+                particles.push(p);
+            }
+        }
+
+        function triggerCelebrationHearts() {
+            playSuccessChime();
+            for (let i = 0; i < 16; i++) {
+                particles.push(new HeartParticle(true));
+            }
+            if (particles.length > 75) {
+                particles.splice(0, 16);
+            }
+        }
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animateCanvas);
+        }
+        window.onload = function() {
+            applyCodedIcons();
+            document.getElementById('couple-names-display').textContent = CONFIG.coupleSubtitle;
+            document.getElementById('polaroid-caption').textContent = CONFIG.polaroidCaption;
+
+            updateLiveCounter();
+            counterInterval = setInterval(updateLiveCounter, 1000);
+            initPhotoStack();
+            initParticles();
+            animateCanvas();
+        };
+    </script>
+</body>
+</html>
